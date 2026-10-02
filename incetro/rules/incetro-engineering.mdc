@@ -1,0 +1,12 @@
+---
+description: Incetro engineering baseline for project work
+alwaysApply: true
+---
+
+# Incetro engineering
+
+- Read the project instructions before the shared overlay. Project files win.
+- Keep changes scoped to the requested behavior.
+- Preserve user-owned files. Do not revert edits that Incetro does not own.
+- Verify the change with the project's tests before calling it done.
+- Prefer the existing ECC and project patterns over new abstractions.

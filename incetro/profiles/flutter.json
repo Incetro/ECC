@@ -1,0 +1,14 @@
+{
+  "id": "flutter",
+  "description": "Flutter projects.",
+  "extends": ["core"],
+  "ecc": {
+    "profile": "minimal",
+    "skills": ["flutter-dart-code-review"]
+  },
+  "incetro": {
+    "rules": [],
+    "agents": [],
+    "skills": []
+  }
+}

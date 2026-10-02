@@ -1,0 +1,13 @@
+---
+description: Incetro security baseline for project work
+alwaysApply: true
+---
+
+# Incetro security
+
+- Do not hardcode secrets, tokens, or credentials.
+- Validate input at trust boundaries.
+- Keep generated paths inside the project root.
+- Do not execute code from project configuration.
+- Treat `.incetro-ecc.json` as data.
+- Do not overwrite project-owned files to make an install succeed.

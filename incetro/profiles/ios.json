@@ -1,0 +1,14 @@
+{
+  "id": "ios",
+  "description": "iOS and Swift projects.",
+  "extends": ["core"],
+  "ecc": {
+    "profile": "minimal",
+    "skills": ["swiftui-patterns", "swift-concurrency-6-2"]
+  },
+  "incetro": {
+    "rules": [],
+    "agents": [],
+    "skills": []
+  }
+}

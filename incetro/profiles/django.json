@@ -1,0 +1,19 @@
+{
+  "id": "django",
+  "description": "Django projects.",
+  "extends": ["core", "python"],
+  "ecc": {
+    "profile": "minimal",
+    "skills": [
+      "django-patterns",
+      "django-security",
+      "django-tdd",
+      "django-verification"
+    ]
+  },
+  "incetro": {
+    "rules": [],
+    "agents": [],
+    "skills": []
+  }
+}

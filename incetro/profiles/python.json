@@ -1,0 +1,14 @@
+{
+  "id": "python",
+  "description": "Python projects.",
+  "extends": ["core"],
+  "ecc": {
+    "profile": "minimal",
+    "skills": ["python-patterns", "python-testing"]
+  },
+  "incetro": {
+    "rules": [],
+    "agents": [],
+    "skills": []
+  }
+}

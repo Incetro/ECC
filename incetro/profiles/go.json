@@ -1,0 +1,14 @@
+{
+  "id": "go",
+  "description": "Go projects.",
+  "extends": ["core"],
+  "ecc": {
+    "profile": "minimal",
+    "skills": ["golang-patterns", "golang-testing"]
+  },
+  "incetro": {
+    "rules": [],
+    "agents": [],
+    "skills": []
+  }
+}

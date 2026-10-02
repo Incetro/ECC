@@ -1,0 +1,16 @@
+{
+  "id": "core",
+  "description": "Baseline Incetro Dev OS for any project.",
+  "extends": [],
+  "ecc": {
+    "profile": "minimal",
+    "skills": [],
+    "modules": [],
+    "hooks": false
+  },
+  "incetro": {
+    "rules": ["incetro-engineering", "incetro-security"],
+    "agents": ["incetro-architect", "incetro-reviewer"],
+    "skills": ["incetro-example"]
+  }
+}

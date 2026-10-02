@@ -1,0 +1,14 @@
+{
+  "id": "web",
+  "description": "Web projects.",
+  "extends": ["core"],
+  "ecc": {
+    "profile": "minimal",
+    "skills": ["react-patterns", "nextjs-turbopack"]
+  },
+  "incetro": {
+    "rules": [],
+    "agents": [],
+    "skills": []
+  }
+}
