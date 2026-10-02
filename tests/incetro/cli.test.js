@@ -2,6 +2,7 @@
 
 const assert = require('assert');
 const { dispatch } = require('../../scripts/incetro/cli');
+const { formatHelp } = require('../../scripts/incetro/core/help');
 const { createHarness, skipIfOldNode } = require('./helpers');
 
 skipIfOldNode();
@@ -11,7 +12,12 @@ harness.test('help returns usage and exit 0', () => {
   const outcome = dispatch(['help']);
   assert.strictEqual(outcome.exitCode, 0);
   assert.match(outcome.result.text, /incetro-ecc init/);
+  assert.match(outcome.result.text, /Commands/);
   assert.match(outcome.result.text, /Exit codes:/);
+  assert.doesNotMatch(outcome.result.text, /\x1b\[/);
+  const colored = formatHelp({ color: true, version: '1.0.0' });
+  assert.match(colored, /\x1b\[36minit \[path\]/);
+  assert.match(colored, /Install ECC and the Incetro overlay/);
 });
 
 harness.test('version reports incetro and ecc versions', () => {

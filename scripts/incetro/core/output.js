@@ -1,38 +1,11 @@
 'use strict';
 
-function formatHelp() {
-  return `Incetro ECC
-
-Usage:
-  incetro-ecc init [path] [--profile <id>]
-  incetro-ecc update [path] [--keep-local | --accept-incetro]
-  incetro-ecc status [path]
-  incetro-ecc doctor [path]
-  incetro-ecc diff [path]
-  incetro-ecc remove [path] [--dry-run | --yes] [--keep-local | --accept-incetro]
-  incetro-ecc self-update
-  incetro-ecc version
-  incetro-ecc help
-
-Global options:
-  --json       Print a single JSON object
-  --verbose    Include paths and ECC warnings
-  --help       Show this help
-
-Exit codes:
-  0  success
-  1  generic failure
-  2  invalid configuration
-  3  conflicts detected
-  4  drift detected
-  5  unhealthy installation
-`;
-}
+const { formatHelp, shouldColor } = require('./help');
 
 function lines(result, verbose) {
   switch (result.type) {
     case 'help':
-      return [result.text.trimEnd()];
+      return [formatHelp({ color: shouldColor(process.stdout) }).trimEnd()];
     case 'version':
       return [
         `Incetro: ${result.incetroVersion}`,
@@ -152,6 +125,13 @@ function lines(result, verbose) {
   }
 }
 
+function paintHelp(message) {
+  if (!shouldColor(process.stderr)) return message;
+  const plain = formatHelp();
+  if (!message.includes(plain)) return message;
+  return message.replace(plain, formatHelp({ color: true }));
+}
+
 function detailLines(result) {
   const details = [];
   for (const file of result.files || []) {
@@ -182,7 +162,7 @@ function renderError(error, options = {}) {
     process.stdout.write(`${JSON.stringify(payload, null, 2)}\n`);
     return;
   }
-  process.stderr.write(`${error.message}\n`);
+  process.stderr.write(`${paintHelp(error.message)}\n`);
   if (options.verbose && error.stack) {
     process.stderr.write(`${error.stack}\n`);
   }
