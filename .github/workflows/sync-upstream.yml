@@ -1,0 +1,98 @@
+name: Sync upstream ECC
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 4 * * *'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: sync-upstream-ecc
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    name: Merge upstream and open a pull request
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Fetch upstream
+        shell: bash
+        run: |
+          set -euo pipefail
+          git remote add upstream https://github.com/affaan-m/ECC.git \
+            || git remote set-url upstream https://github.com/affaan-m/ECC.git
+          git fetch upstream main
+
+      - name: Stop when upstream has no new commits
+        id: check
+        shell: bash
+        run: |
+          set -euo pipefail
+          ahead="$(git rev-list --count HEAD..upstream/main)"
+          if [ "$ahead" = "0" ]; then
+            echo "new=false" >> "$GITHUB_OUTPUT"
+            echo "upstream/main has no commits that main lacks."
+          else
+            echo "new=true" >> "$GITHUB_OUTPUT"
+            echo "sha=$(git rev-parse --short=12 upstream/main)" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Merge upstream/main onto a sync branch
+        if: steps.check.outputs.new == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          branch="sync/upstream-${{ steps.check.outputs.sha }}-${{ github.run_id }}"
+          git checkout -B "$branch"
+          git -c user.name='github-actions[bot]' \
+            -c user.email='41898282+github-actions[bot]@users.noreply.github.com' \
+            merge --no-ff upstream/main \
+            -m "merge: sync upstream ECC ${{ steps.check.outputs.sha }}"
+          echo "branch=$branch" >> "$GITHUB_ENV"
+
+      - name: Install dependencies
+        if: steps.check.outputs.new == 'true'
+        shell: bash
+        env:
+          COREPACK_ENABLE_STRICT: '0'
+          npm_config_ignore_scripts: 'true'
+        run: npm install
+
+      - name: Run the full test suite
+        if: steps.check.outputs.new == 'true'
+        shell: bash
+        run: npm test
+
+      - name: Push sync branch and open a pull request
+        if: steps.check.outputs.new == 'true'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          git push -u origin "$branch"
+          pr_url="$(gh pr create \
+            --base main \
+            --head "$branch" \
+            --title "merge: sync upstream ECC ${{ steps.check.outputs.sha }}" \
+            --body "Merge affaan-m/ECC main at ${{ steps.check.outputs.sha }}. npm test passed on this branch. This job does not reset main and does not force-push main.")"
+          echo "pr_url=$pr_url" >> "$GITHUB_ENV"
+
+      - name: Enable auto-merge when policy allows
+        if: steps.check.outputs.new == 'true'
+        continue-on-error: true
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh pr merge --auto --merge "$pr_url"
