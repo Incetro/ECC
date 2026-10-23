@@ -32,7 +32,7 @@ harness.test('accepts headings, en dashes, frontmatter, fenced code and flat-squ
     '',
     'Telegram-бот – работает 1–3 дня.',
     '',
-    '![Python](https://img.shields.io/badge/Python-3.12-CCB8F4?style=flat-square&labelColor=F5F7FB&logo=python&logoColor=334155)',
+    '![Python](https://img.shields.io/badge/Python-3.12-9170CF?style=flat-square&labelColor=F5F7FB&logo=python&logoColor=334155)',
     '',
     '[Архитектура](docs/architecture.md)',
     '',
@@ -53,7 +53,7 @@ harness.test('rejects dividers, em dash, broken links, incorrect badges', () => 
     '---',
     '<hr>',
     '[Не найдено](docs/missing.md)',
-    '![Python](https://img.shields.io/badge/Python-3.12-CCB8F4?style=for-the-badge)',
+    '![Python](https://img.shields.io/badge/Python-3.12-9170CF?style=for-the-badge)',
     '![Ruby](https://img.shields.io/badge/Ruby-3.1-FF00FF?style=flat-square)',
   ].join('\n'));
   const issues = checkProject(root).issues;
