@@ -45,14 +45,21 @@ function listFilesRecursive(dirPath, prefix = '') {
   return files;
 }
 
+function componentKey(kind, id) {
+  return `${kind}:${id}`;
+}
+
 function addComponent(catalog, component) {
-  if (catalog.byId.has(component.id)) {
+  const key = componentKey(component.kind, component.id);
+  if (catalog.byId.has(key)) {
     throw new IncetroError(
       `Duplicate Incetro component id: ${component.id}`,
       EXIT.CONFIG
     );
   }
-  catalog.byId.set(component.id, component);
+  catalog.byId.set(key, component);
+  const sameName = catalog.byBareId.get(component.id) || [];
+  catalog.byBareId.set(component.id, [...sameName, component]);
   catalog[component.kind].push(component);
 }
 
@@ -64,6 +71,7 @@ function loadCatalog(sourceRoot) {
     agents: [],
     skills: [],
     byId: new Map(),
+    byBareId: new Map(),
   };
 
   const rulesDir = path.join(root, 'rules');
@@ -133,6 +141,7 @@ function loadCatalog(sourceRoot) {
 
 module.exports = {
   ID_PATTERN,
+  componentKey,
   loadCatalog,
   overlayRoot,
 };

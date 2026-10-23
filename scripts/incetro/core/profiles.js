@@ -5,7 +5,7 @@ const path = require('path');
 
 const { DEFAULT_PROFILE, EXIT, IncetroError } = require('../constants');
 const { isRegularFile, lstatOrNull } = require('./paths');
-const { ID_PATTERN } = require('./manifest');
+const { ID_PATTERN, componentKey } = require('./manifest');
 
 const PROFILE_KEYS = new Set(['id', 'description', 'extends', 'ecc', 'incetro']);
 const ECC_KEYS = new Set(['profile', 'skills', 'modules', 'hooks']);
@@ -229,10 +229,12 @@ function applyIncludeExclude(resolved, catalog, config) {
   };
 
   for (const id of config.include || []) {
-    const component = catalog.byId.get(id);
-    if (component) {
-      const list = selection.incetro[component.kind];
-      if (!list.includes(id)) list.push(id);
+    const components = catalog.byBareId.get(id) || [];
+    if (components.length > 0) {
+      for (const component of components) {
+        const list = selection.incetro[component.kind];
+        if (!list.includes(component.id)) list.push(component.id);
+      }
       continue;
     }
     if (!selection.ecc.skills.includes(id) && !selection.ecc.modules.includes(id)) {
@@ -241,7 +243,7 @@ function applyIncludeExclude(resolved, catalog, config) {
   }
 
   const knownIds = new Set([
-    ...catalog.byId.keys(),
+    ...catalog.byBareId.keys(),
     ...selection.incetro.rules,
     ...selection.incetro.agents,
     ...selection.incetro.skills,
@@ -265,8 +267,8 @@ function applyIncludeExclude(resolved, catalog, config) {
 function assertIncetroIds(selection, catalog) {
   for (const kind of ['rules', 'agents', 'skills']) {
     for (const id of selection.incetro[kind]) {
-      const component = catalog.byId.get(id);
-      if (!component || component.kind !== kind) {
+      const component = catalog.byId.get(componentKey(kind, id));
+      if (!component) {
         throw new IncetroError(
           `Profile ${selection.id} references missing ${kind.slice(0, -1)}: ${id}`,
           EXIT.CONFIG

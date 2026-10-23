@@ -1,6 +1,7 @@
 'use strict';
 
 const { SCHEMA_VERSION } = require('../constants');
+const { componentKey } = require('./manifest');
 const { sha256Buffer, sha256File } = require('./hashes');
 const { fileBytes } = require('./ownership');
 const { applyTransaction } = require('./transaction');
@@ -13,7 +14,7 @@ function buildDesired(sourceRoot, projectRoot, selection, target, catalog) {
   const files = [];
   for (const kind of ['rules', 'agents', 'skills']) {
     for (const id of selection.incetro[kind]) {
-      const component = catalog.byId.get(id);
+      const component = catalog.byId.get(componentKey(kind, id));
       files.push(...target.mapComponent(component));
     }
   }
