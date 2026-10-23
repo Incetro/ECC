@@ -9,7 +9,7 @@ const FENCE = /^ {0,3}(`{3,}|~{3,})/;
 const SHIELDS = /https?:\/\/img\.shields\.io\/[^\s)>"']+/g;
 const LABEL_COLOR = 'F5F7FB';
 const LOGO_COLOR = '334155';
-const PALETTE = new Set(['A7D8F5', 'CCB8F4', 'A9E4D6', 'BCCBFA', 'CAD9E8', 'BDE8CE', 'E3EAF1', 'FADEB4', 'F5C6D0']);
+const PALETTE = new Set(['448FC7', '9170CF', '34A494', '7587CF', '778EA5', '42A87A', '8F9FB0', 'DCA052', 'D56C7D']);
 const MARKDOWN_LINK = /!?\[[^\]]*\]\((?:<([^>]+)>|([^\s)]+))(?:\s+["'][^"']+["'])?\)/g;
 const IGNORE = new Set(['.git', '.cursor', '.incetro-ecc', 'node_modules', 'vendor', 'build', 'dist', '.venv', '__pycache__']);
 
@@ -74,7 +74,7 @@ function checkFile(file, root) {
       const parsed = new URL(url);
       const normalizeHex = value => (value || '').replace(/^%23|^#/, '').toUpperCase();
       if (normalizeHex(parsed.searchParams.get('labelColor')) !== LABEL_COLOR) {
-        issues.push({ file, line: number, message: 'Для светлой палитры требуется labelColor=' + LABEL_COLOR });
+        issues.push({ file, line: number, message: 'Для единого стиля требуется labelColor=' + LABEL_COLOR });
       }
       if (parsed.searchParams.has('logo') && normalizeHex(parsed.searchParams.get('logoColor')) !== LOGO_COLOR) {
         issues.push({ file, line: number, message: 'Для логотипа требуется logoColor=' + LOGO_COLOR });
