@@ -112,13 +112,58 @@ function checkFile(file, root) {
   return issues;
 }
 
+
+function detectTechnologySignals(root) {
+  const technologies = new Set();
+  const has = name => {
+    const file = path.join(root, name);
+    return fs.existsSync(file) && fs.statSync(file).isFile();
+  };
+  const read = name => {
+    if (!has(name)) return '';
+    const file = path.join(root, name);
+    if (fs.statSync(file).size > 1024 * 1024) return '';
+    return fs.readFileSync(file, 'utf8');
+  };
+  if (['pyproject.toml', 'requirements.txt', 'Pipfile', 'setup.py'].some(has)) technologies.add('Python');
+  if (has('package.json')) technologies.add('Node.js');
+  if (has('go.mod')) technologies.add('Go');
+  if (has('Cargo.toml')) technologies.add('Rust');
+  if (has('Package.swift')) technologies.add('Swift');
+  if (has('pubspec.yaml')) technologies.add(/(^|\n)\s*flutter\s*:/m.test(read('pubspec.yaml')) ? 'Flutter' : 'Dart');
+  const composeFiles = ['docker-compose.yml', 'docker-compose.yaml', 'compose.yml', 'compose.yaml'];
+  if (has('Dockerfile') || composeFiles.some(has)) technologies.add('Docker');
+  const compose = composeFiles.map(read).join('\n');
+  if (/^\s*image:\s*["']?(?:[\w.-]+\/)*postgres(?::|@|\b)/im.test(compose)) technologies.add('PostgreSQL');
+  if (/^\s*image:\s*["']?(?:[\w.-]+\/)*redis(?::|@|\b)/im.test(compose)) technologies.add('Redis');
+  if (/^\s*image:\s*["']?(?:[\w.-]+\/)*mysql(?::|@|\b)/im.test(compose)) technologies.add('MySQL');
+  return technologies;
+}
+
+function checkReadmeBadges(root) {
+  const readme = path.join(root, 'README.md');
+  if (!fs.existsSync(readme) || !fs.statSync(readme).isFile()) return [];
+  const expected = Math.min(3, detectTechnologySignals(root).size);
+  if (expected === 0) return [];
+  const firstSection = fs.readFileSync(readme, 'utf8').split(/^##\s+/m, 1)[0];
+  const actual = [...firstSection.matchAll(SHIELDS)].length;
+  if (actual >= expected) return [];
+  return [{
+    file: readme,
+    line: 1,
+    message: 'README программного проекта: требуется минимум ' + expected
+      + ' бейджей Shields.io в первом разделе; найдено ' + actual
+      + '. Неподтверждённые технологии ради количества не добавлять.',
+  }];
+}
+
 function checkProject(root) {
   const directory = path.resolve(root);
   if (!fs.existsSync(directory) || !fs.statSync(directory).isDirectory()) {
     throw new Error('Нет директории проекта: ' + directory);
   }
   const files = collectDocs(directory);
-  const issues = files.flatMap(file => checkFile(file, directory));
+  const issues = files.flatMap(file => checkFile(file, directory)).concat(checkReadmeBadges(directory));
   return { root: directory, files, issues };
 }
 
@@ -147,4 +192,4 @@ if (require.main === module) {
   catch (error) { process.stderr.write(error.message + '\n'); process.exitCode = 2; }
 }
 
-module.exports = { collectDocs, checkFile, checkProject, main };
+module.exports = { collectDocs, checkFile, checkProject, checkReadmeBadges, detectTechnologySignals, main };
