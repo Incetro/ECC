@@ -16,32 +16,32 @@ GitHub-native, minimal, editorial. Акцент на иерархии, инфо�
 
 ## Цветовой код бейджей
 
-Палитра предлагается для утверждения; изменение значений централизовано в этом файле. Цвет выбирают по **смыслу**, а не по настроению автора.
+Палитра **Incetro Air** предлагается для утверждения. Светлые пастельные цвета вместо плотных тёмных заливок, единая графитовая графика и мягкая контрастность. Цвет выбирают по **смыслу**, а не по настроению автора. Изменение значений централизовано в этом файле.
 
 | Категория | HEX | Применение |
 | --- | --- | --- |
-| Платформы и интеграции | `2563EB` | Telegram, iOS, Android, внешние платформы |
-| Языки и runtime | `7C3AED` | Python, Kotlin, Swift, Go, Node.js |
-| Фреймворки | `0D9488` | Django, Flutter, SwiftUI, Vue |
-| Данные и хранение | `4F46E5` | PostgreSQL, Redis, SQLite, S3 |
-| Инфраструктура | `475569` | Docker, Terraform, hosting, deployment |
-| Подтверждённый успех | `15803D` | Реально успешная сборка или тест |
-| Документация и лицензии | `64748B` | Docs, MIT, Apache |
-| Запланировано | `D97706` | Не подключённая пока платформа |
-| Ошибка или блокировка | `B91C1C` | Реально неуспешная сборка или blocker |
+| Платформы и интеграции | `A7D8F5` | Telegram, iOS, Android, внешние платформы |
+| Языки и runtime | `CCB8F4` | Python, Kotlin, Swift, Go, Node.js |
+| Фреймворки | `A9E4D6` | Django, Flutter, SwiftUI, Vue |
+| Данные и хранение | `BCCBFA` | PostgreSQL, Redis, SQLite, S3 |
+| Инфраструктура | `CAD9E8` | Docker, Terraform, hosting, deployment |
+| Подтверждённый успех | `BDE8CE` | Реально успешная сборка или тест |
+| Документация и лицензии | `E3EAF1` | Docs, MIT, Apache |
+| Запланировано | `FADEB4` | Не подключённая пока платформа |
+| Ошибка или блокировка | `F5C6D0` | Реально неуспешная сборка или blocker |
 
-HEX без `#` в URL Shields.io. Добавлять новые цвета только при необходимости нового семантического статуса.
+HEX без `#` в URL Shields.io. Фон левой части: `F5F7FB`. Цвет монохромного логотипа: `334155`. Не затемнять отдельные бейджи по вкусу автора. Добавлять новые цвета только при необходимости нового семантического статуса.
 
 ## Формат Shields.io
 
-Везде `style=flat-square`; `logoColor=white` при наличии светлого логотипа. Ссылку с бейджа направлять к релевантному источнику: workflow, инструкциям, реализации или официальной технологии.
+Бейджи выполнены как светлая 2-тоновая система. Левая часть – единый фон `labelColor=F5F7FB` (почти белый), правая часть – пастельный цвет категории. Везде `style=flat-square`. Для монохромных логотипов используется `logoColor=334155` (графитовый). Внутренний текст должен оставаться читаемым в обеих темах GitHub. Ссылку с бейджа направлять к релевантному источнику: workflow, инструкциям, реализации или официальной технологии.
 
 Пример формы, **не готовое утверждение о произвольном проекте**:
 
 ```md
-![Python](https://img.shields.io/badge/Python-3.12%2B-7C3AED?style=flat-square&logo=python&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4F46E5?style=flat-square&logo=postgresql&logoColor=white)
-![Docker](https://img.shields.io/badge/Docker-Compose-475569?style=flat-square&logo=docker&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3.12%2B-CCB8F4?style=flat-square&labelColor=F5F7FB&logo=python&logoColor=334155)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-BCCBFA?style=flat-square&labelColor=F5F7FB&logo=postgresql&logoColor=334155)
+![Docker](https://img.shields.io/badge/Docker-Compose-CAD9E8?style=flat-square&labelColor=F5F7FB&logo=docker&logoColor=334155)
 ```
 
 Версии сверять с манифестом проекта. Не путать заявленную поддержку, реализованную интеграцию, тестовое покрытие и успешный продакшен-деплой.
