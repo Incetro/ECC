@@ -2,6 +2,12 @@
 
 This changelog tracks the Incetro layer only. ECC upstream releases stay in the repository `CHANGELOG.md`.
 
+## 1.1.1
+
+- Require verified technology badges in software project READMEs, while leaving nontechnical docs-only repositories optional.
+- Check for a minimum of 1–3 badges from root manifest evidence, with regression tests.
+- Align documentation skill, always-on rule, reviewer and README template.
+
 ## 1.1.0
 
 - Introduce the Incetro living documentation rule, documentation skill and independent docs reviewer in the inherited core profile.
