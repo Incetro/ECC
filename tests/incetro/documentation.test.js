@@ -66,6 +66,37 @@ harness.test('rejects dividers, em dash, broken links, incorrect badges', () => 
   assert.ok(issues.some(issue => issue.message.includes('labelColor')));
 });
 
+
+harness.test('requires 3 badges when Python, Docker and PostgreSQL are verified', () => {
+  const root = makeTempDir('docs-badge-required');
+  writeFile(root, 'pyproject.toml', '[project]\nrequires-python = ">=3.12"\n');
+  writeFile(root, 'Dockerfile', 'FROM python:3.12-slim\n');
+  writeFile(root, 'docker-compose.yml', 'services:\n  db:\n    image: postgres:16-alpine\n');
+  const readme = writeFile(root, 'README.md', '# Пример\n\nПроект с проверенным стеком.\n');
+  assert.ok(checkProject(root).issues.some(issue => issue.message.includes('минимум 3 бейджей')));
+  const badge = (name, color) =>
+    '![' + name + '](https://img.shields.io/badge/' + name + '-verified-' + color
+    + '?style=flat-square&labelColor=F5F7FB)';
+  fs.writeFileSync(readme, '# Пример\n\n'
+    + badge('Python', '9170CF') + '\n'
+    + badge('PostgreSQL', '7587CF') + '\n'
+    + badge('Docker', '778EA5') + '\n\n## О проекте\n');
+  assert.deepStrictEqual(checkProject(root).issues, []);
+});
+
+harness.test('does not force badges into a docs-only repository', () => {
+  const root = makeTempDir('docs-no-stack');
+  writeFile(root, 'README.md', '# Описание\n\nТекст документации.\n');
+  assert.deepStrictEqual(checkProject(root).issues, []);
+});
+
+harness.test('requires only verified amount when stack has a single signal', () => {
+  const root = makeTempDir('docs-python-only');
+  writeFile(root, 'pyproject.toml', '[project]\nname = "demo"\n');
+  writeFile(root, 'README.md', '# Пример\n');
+  assert.ok(checkProject(root).issues.some(issue => issue.message.includes('минимум 1 бейджей')));
+});
+
 harness.test('does not touch project files', () => {
   const root = makeTempDir('docs-readonly');
   const file = writeFile(root, 'README.md', '# Project\n');
