@@ -7,7 +7,9 @@ const path = require('path');
 const DIVIDER = /^ {0,3}(?:-{3,}|\*{3,}|_{3,})[ \t]*$/;
 const FENCE = /^ {0,3}(`{3,}|~{3,})/;
 const SHIELDS = /https?:\/\/img\.shields\.io\/[^\s)>"']+/g;
-const PALETTE = new Set(['2563EB', '7C3AED', '0D9488', '4F46E5', '475569', '15803D', '64748B', 'D97706', 'B91C1C']);
+const LABEL_COLOR = 'F5F7FB';
+const LOGO_COLOR = '334155';
+const PALETTE = new Set(['A7D8F5', 'CCB8F4', 'A9E4D6', 'BCCBFA', 'CAD9E8', 'BDE8CE', 'E3EAF1', 'FADEB4', 'F5C6D0']);
 const MARKDOWN_LINK = /!?\[[^\]]*\]\((?:<([^>]+)>|([^\s)]+))(?:\s+["'][^"']+["'])?\)/g;
 const IGNORE = new Set(['.git', '.cursor', '.incetro-ecc', 'node_modules', 'vendor', 'build', 'dist', '.venv', '__pycache__']);
 
@@ -70,6 +72,13 @@ function checkFile(file, root) {
       }
       // Static badges must use a color from the centrally defined Incetro palette.
       const parsed = new URL(url);
+      const normalizeHex = value => (value || '').replace(/^%23|^#/, '').toUpperCase();
+      if (normalizeHex(parsed.searchParams.get('labelColor')) !== LABEL_COLOR) {
+        issues.push({ file, line: number, message: 'Для светлой палитры требуется labelColor=' + LABEL_COLOR });
+      }
+      if (parsed.searchParams.has('logo') && normalizeHex(parsed.searchParams.get('logoColor')) !== LOGO_COLOR) {
+        issues.push({ file, line: number, message: 'Для логотипа требуется logoColor=' + LOGO_COLOR });
+      }
       let color = null;
       if (parsed.pathname.startsWith('/badge/')) {
         color = parsed.pathname.split('-').pop();
