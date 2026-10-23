@@ -1,7 +1,6 @@
 'use strict';
 
 const assert = require('assert');
-const path = require('path');
 const fs = require('fs');
 const { loadCatalog } = require('../../scripts/incetro/core/manifest');
 const { resolveSelection } = require('../../scripts/incetro/core/profiles');
@@ -55,6 +54,7 @@ harness.test('rejects dividers, em dash, broken links, incorrect badges', () => 
     '<hr>',
     '[Не найдено](docs/missing.md)',
     '![Python](https://img.shields.io/badge/Python-3.12-7C3AED?style=for-the-badge)',
+    '![Ruby](https://img.shields.io/badge/Ruby-3.1-FF00FF?style=flat-square)',
   ].join('\n'));
   const issues = checkProject(root).issues;
   assert.ok(issues.some(issue => issue.message.includes('длинное тире')));
@@ -62,6 +62,7 @@ harness.test('rejects dividers, em dash, broken links, incorrect badges', () => 
   assert.ok(issues.some(issue => issue.message.includes('HTML-разделитель')));
   assert.ok(issues.some(issue => issue.message.includes('отсутствующий путь')));
   assert.ok(issues.some(issue => issue.message.includes('flat-square')));
+  assert.ok(issues.some(issue => issue.message.includes('вне палитры')));
 });
 
 harness.test('does not touch project files', () => {
