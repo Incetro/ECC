@@ -7,6 +7,7 @@ const path = require('path');
 const DIVIDER = /^ {0,3}(?:-{3,}|\*{3,}|_{3,})[ \t]*$/;
 const FENCE = /^ {0,3}(`{3,}|~{3,})/;
 const SHIELDS = /https?:\/\/img\.shields\.io\/[^\s)>"']+/g;
+const PALETTE = new Set(['2563EB', '7C3AED', '0D9488', '4F46E5', '475569', '15803D', '64748B', 'D97706', 'B91C1C']);
 const MARKDOWN_LINK = /!?\[[^\]]*\]\((?:<([^>]+)>|([^\s)]+))(?:\s+["'][^"']+["'])?\)/g;
 const IGNORE = new Set(['.git', '.cursor', '.incetro-ecc', 'node_modules', 'vendor', 'build', 'dist', '.venv', '__pycache__']);
 
@@ -66,6 +67,17 @@ function checkFile(file, root) {
       const url = badge[0].replaceAll('&amp;', '&');
       if (!/[?&]style=flat-square(?:&|$)/.test(url)) {
         issues.push({ file, line: number, message: 'Shields.io badge должен иметь style=flat-square.' });
+      }
+      // Static badges must use a color from the centrally defined Incetro palette.
+      const parsed = new URL(url);
+      let color = null;
+      if (parsed.pathname.startsWith('/badge/')) {
+        color = parsed.pathname.split('-').pop();
+      } else if (parsed.pathname === '/static/v1') {
+        color = parsed.searchParams.get('color');
+      }
+      if (color && !PALETTE.has(color.replace(/^%23|^#/, '').toUpperCase())) {
+        issues.push({ file, line: number, message: 'Цвет бейджа вне палитры Incetro: ' + color });
       }
     }
     for (const match of line.matchAll(MARKDOWN_LINK)) {
