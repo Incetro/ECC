@@ -41,7 +41,7 @@ description: Create, refresh and review accurate project documentation with Ince
 
 - Используй нативный GitHub Markdown. Заголовки и пробелы вместо декоративных разделителей.
 - Предпочитай 1 канонический источник на факт и ссылки на него из README.
-- Бейджи только Shields.io, `style=flat-square`, семантические цвета из утверждаемой палитры.
+- Бейджи только Shields.io, `style=flat-square`, семантические цвета из утверждённой палитры Incetro Balanced.
 - Никогда не маркируй `passing`, `production`, `100%` без проверяемого актуального источника.
 - Не применяй огромные hero, вёрстку на HTML-таблицах или псевдокарточках.
 - Русская типографика по правилу `incetro-copy`.
