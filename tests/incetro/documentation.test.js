@@ -73,7 +73,7 @@ harness.test('requires 3 badges when Python, Docker and PostgreSQL are verified'
   writeFile(root, 'Dockerfile', 'FROM python:3.12-slim\n');
   writeFile(root, 'docker-compose.yml', 'services:\n  db:\n    image: postgres:16-alpine\n');
   const readme = writeFile(root, 'README.md', '# Пример\n\nПроект с проверенным стеком.\n');
-  assert.ok(checkProject(root).issues.some(issue => issue.message.includes('минимум 3 бейджей')));
+  assert.ok(checkProject(root).issues.some(issue => issue.message.includes('минимум 3 бейджа')));
   const badge = (name, color) =>
     '![' + name + '](https://img.shields.io/badge/' + name + '-verified-' + color
     + '?style=flat-square&labelColor=F5F7FB)';
@@ -94,7 +94,7 @@ harness.test('requires only verified amount when stack has a single signal', () 
   const root = makeTempDir('docs-python-only');
   writeFile(root, 'pyproject.toml', '[project]\nname = "demo"\n');
   writeFile(root, 'README.md', '# Пример\n');
-  assert.ok(checkProject(root).issues.some(issue => issue.message.includes('минимум 1 бейджей')));
+  assert.ok(checkProject(root).issues.some(issue => issue.message.includes('минимум 1 бейдж')));
 });
 
 harness.test('does not touch project files', () => {
