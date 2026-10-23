@@ -1,6 +1,6 @@
 # Incetro ECC
 
-Incetro ECC is a project installer on top of [ECC](https://github.com/affaan-m/ECC). One command prepares a repository for Cursor:
+Incetro ECC – установщик агентного окружения поверх [ECC](https://github.com/affaan-m/ECC). Одна команда готовит репозиторий для Cursor:
 
 ```bash
 npm install -g git+https://github.com/Incetro/ECC.git
@@ -8,10 +8,10 @@ cd my-project
 incetro-ecc init
 ```
 
-After that, the project has three layers:
+В проекте 3 слоя:
 
-- ECC-managed files, installed by the upstream ECC installer
-- Incetro-managed files, installed from the `incetro/` overlay
-- Project-owned files, which the installer does not change
+- Файлы ECC – устанавливаются upstream ECC.
+- Файлы Incetro – устанавливаются из `incetro/` и отслеживаются по хешам.
+- Файлы самого проекта – установщик не редактирует.
 
-Read [getting-started.md](getting-started.md) for the short path. The rest of this directory explains commands, ownership, profiles, and upstream sync.
+Читайте [начало работы](getting-started.md) для первоначальной настройки. [Стандарт документации проектов](documentation.md) описывает живые README и docs, палитру Shields.io, правила тире и подключение проверок. Остальные документы объясняют команды, права на файлы, профили и синхронизацию upstream.

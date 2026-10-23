@@ -9,8 +9,20 @@
     "hooks": false
   },
   "incetro": {
-    "rules": ["incetro-engineering", "incetro-security", "incetro-copy"],
-    "agents": ["incetro-architect", "incetro-reviewer"],
-    "skills": ["incetro-example"]
+    "rules": [
+      "incetro-engineering",
+      "incetro-security",
+      "incetro-copy",
+      "incetro-documentation"
+    ],
+    "agents": [
+      "incetro-architect",
+      "incetro-reviewer",
+      "incetro-docs-reviewer"
+    ],
+    "skills": [
+      "incetro-example",
+      "incetro-documentation"
+    ]
   }
 }
