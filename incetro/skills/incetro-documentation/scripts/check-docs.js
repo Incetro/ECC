@@ -152,7 +152,7 @@ function checkReadmeBadges(root) {
     file: readme,
     line: 1,
     message: 'README программного проекта: требуется минимум ' + expected
-      + ' бейджей Shields.io в первом разделе; найдено ' + actual
+      + (expected === 1 ? ' бейдж Shields.io' : ' бейджа Shields.io') + ' в первом разделе; найдено ' + actual
       + '. Неподтверждённые технологии ради количества не добавлять.',
   }];
 }
